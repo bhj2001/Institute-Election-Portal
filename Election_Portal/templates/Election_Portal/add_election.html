@@ -1,0 +1,30 @@
+{% extends "Election_Portal/template.html" %}
+{% block title %}Nomination{% endblock %}
+{% block content %}
+
+
+
+<div class="row" style="margin-top:4%">
+    <form class="col s4 offset-s4" method="POST" action="" enctype="multipart/form-data">
+       {% csrf_token %}
+       {% for field in form %}
+           <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <span class="text-danger small">{{ field.errors }}</span>
+                </div>
+                <label class="control-label col-sm-2" for="song_title">{{ field.label_tag }}</label>
+                <div class="col-sm-10">{{ field }}</div>
+            </div>
+        {% endfor %}
+        <br>
+        <button class="btn-floating btn-large waves-effect waves-light" type="submit" ><i class="material-icons">send</i></button>
+    </form>
+</div>
+
+{% endblock %}
+{% block javascript %}
+
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+  {% endblock %}

@@ -1,0 +1,109 @@
+{% extends "Election_Portal/template.html" %}
+{% block title %}Vote{% endblock %}
+{% block content %}
+<script>
+	function startTimer(duration, display) {
+		    var start = Date.now(),
+			diff,
+			hours,
+			minutes,
+			seconds;
+		    function timer() {
+			diff = duration - (((Date.now() - start) / 1000) | 0);
+			minutes = (diff / 60) | 0;
+			hours = (minutes/60) | 0;
+			minutes=(minutes-(hours*60)) | 0;
+			seconds = (diff % 60) | 0;
+				
+			hours= hours < 10 ? "0" + hours : hours;
+			minutes = minutes < 10 ? "0" + minutes : minutes;
+			seconds = seconds < 10 ? "0" + seconds : seconds;
+
+			display.textContent = hours + ":" + minutes + ":" + seconds; 
+
+			if (diff <= 0) {
+			    start = Date.now() + 1000;
+			}
+		    };
+		    timer();
+		    setInterval(timer, 1000);
+		}
+
+		window.onload = function () {
+		    var alpha = {{ time_left }},
+			display = document.querySelector('#time');
+		    startTimer(alpha, display);
+		};
+</script>
+<div class="row valign-wrapper">
+    <div class="col s4 offset-s4">
+    <h3 class="center-align">{{ election.election_name }}</h3>
+    </div>
+	<div class="col s2 offset-s1">
+        <strong><span style="color:#000000;font-size:24px">Election closes in <span id="time"></span></span></strong>
+	</div>
+</div>
+<div class="row">
+    <form class="col s12" method="POST" action="{% url 'Election_Portal:vote_done' election.id %}">
+    {% csrf_token %}
+        <table class="col s8 offset-s2">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Department
+                    </th>
+                    <th>
+                        Manifesto
+                    </th>
+                    <th>
+                        Vote
+                    </th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for candidate in candidates %}
+                <tr>
+                    <td>
+                        <font color="#8B008B">{{ candidate.name }} ({{ candidate.user }})</font>
+                    </td>
+                    <td>
+                        <font color="#DB7093">{{ candidate.branch }}</font>
+                    </td>
+                    <td>
+                        <a href="#modal{{ candidate.myid }}" class="modal-trigger">Link</a>
+                        <div id="modal{{ candidate.myid }}" class="modal modal-fixed-footer z-depth-3">
+                            <div class="modal-content">
+                                <h5>{{ candidate.name }}, {{ candidate.branch }}</h5>
+                                <hr>
+                                <br>
+                                {{ candidate.work_experience|safe }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <input color="black" id="{{ candidate.user }}" type="radio" name="candidate" value="{{ candidate.user }}">
+                        <label for="{{ candidate.user }}"></label>                        
+                    </td>
+                </div>
+                <br>
+                {% endfor %}
+            </tbody>
+        </table>
+    	<div class="row">
+    		<div class="col s1 offset-s9">
+    			<button type="submit" name="action">Submit</button>
+    		</div>
+    	</div>
+    </form>
+</div>
+
+{% endblock %}
+{% block javascript %}
+$(document).ready(function(){
+$('.modal-trigger').leanModal();
+});
+{% endblock %}

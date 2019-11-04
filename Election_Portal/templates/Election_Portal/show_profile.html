@@ -1,0 +1,76 @@
+{% extends "Election_Portal/template.html" %}
+{% load staticfiles %}
+{% block title %}Profile{% endblock %}
+{% block javascript %}
+$(document).ready(function(){
+$('.modal-trigger').leanModal();
+Materialize.toast('{{ toast_message }}', 30000,'rounded');
+});
+
+{% endblock %}
+{% block content %}
+
+<div class="container">
+      <div class="row">
+      
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+   
+   
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{ profile.userid.username }} 's Profile</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                
+                <div class=" col-md-9 col-lg-9 "> 
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td>Name:</td>
+                        <td>{{ profile.first_name }} {{ profile.last_name }}</td>
+                      </tr>
+                      <tr>
+                        <td>Branch:</td>
+                        <td>{{ profile.branch }}</td>
+                      </tr>
+                      <tr>
+                        <td>Section:</td>
+                        <td>{{ profile.section }}</td>
+                      </tr>
+                      <tr>
+                        <td>Year:</td>
+                        <td>{{ profile.year }}</td>
+                      </tr>
+                      <tr>
+                        <td>Gender:</td>
+                        <td>{{ profile.gender }}</td>
+                      </tr>
+                      <tr>
+                        <td>Birth Date</td>
+                        <td>{{ profile.birthdate|date:"M d, Y" }}</td>
+                      </tr>
+                      <tr>
+                        <td>Email</td>
+                        <td><a href= "https:/{{ profile.emailid }}" >{{ profile.emailid }}</a></td>
+                      </tr>
+                        <td>Address</td>
+                        <td>{{ profile.hostel }} Hostel, Room no {{ profile.room }}, IIT BHU, Varanasi </td>
+                           
+                
+                     
+                    </tbody>
+                  </table>
+                  <br>
+                  <a href={% url 'Election_Portal:edit_profile' %} class="btn btn-primary">Edit Profile</a>
+                </div>
+              </div>
+            </div>
+                 
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
